@@ -6,6 +6,36 @@ export const highlights = [
   { label: "1,7 km od plaže", detail: "Slovenska plaža" },
 ] as const;
 
+export const heroFeatures = [
+  {
+    id: "shade",
+    title: "Šumska hladovina",
+    body: "Dvije prostrane terase u prirodnom hladu",
+  },
+  {
+    id: "evenings",
+    title: "Prijatne večeri",
+    body: "Svjež vazduh i mir van gradske buke",
+  },
+  {
+    id: "parking",
+    title: "Siguran parking",
+    body: "Zajednički parking zgrade i garaža",
+  },
+  {
+    id: "entertainment",
+    title: "Zabava",
+    body: "2× TV, kablovska i besplatan Netflix",
+  },
+] as const;
+
+export const heroRibbon = [
+  { id: "size", label: "75 m² prostora" },
+  { id: "rooms", label: "2 spavaće sobe" },
+  { id: "beach", label: "1,7 km od Slovenske plaže" },
+  { id: "wifi", label: "Optički WiFi & AC" },
+] as const;
+
 export const amenities = [
   {
     id: "terraces",

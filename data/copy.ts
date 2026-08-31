@@ -13,8 +13,11 @@ export const copy = {
   },
   hero: {
     badge: "Budva · Dubovica · Zelena Oaza Miru",
-    ctaPrimary: "Proveri Dostupnost",
-    ctaSecondary: "Pogledaj Galeriju",
+    ctaPrimary: "Proveri dostupnost",
+    ctaSecondary: "Pogledaj sve pogodnosti",
+    lead: "Prostran dvosoban stan sa dvije terase, okružen šumom i prirodnom svježinom. Potpuno opremljen za komforan i bezbrižan odmor porodica i parova.",
+    ratingBadge: "9.6 / 10 · Izvanredno na Booking.com",
+    cardFooter: "Idealno za boravak porodica i parova koji žele komfor i mir u Budvi.",
   },
   about: {
     kicker: "O apartmanu",

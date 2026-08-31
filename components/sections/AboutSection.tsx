@@ -35,7 +35,7 @@ export function AboutSection() {
           <div className="relative -mt-8 aspect-[4/5] overflow-hidden rounded-3xl shadow-lg sm:-mt-12">
             <Image
               src={MOSAIC[2]}
-              alt="Spavaća soba sa izlazom na terasu"
+              alt="Otvoreni dnevni boravak sa trpezarijom i modernom kuhinjom"
               fill
               sizes="(max-width: 1024px) 50vw, 25vw"
               className="object-cover"

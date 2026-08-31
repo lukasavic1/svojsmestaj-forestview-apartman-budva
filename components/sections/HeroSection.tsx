@@ -1,47 +1,105 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { CalendarCheck, Images, Leaf } from "lucide-react";
-import { media } from "@/data/media";
+import {
+  BedDouble,
+  Car,
+  CalendarCheck,
+  Leaf,
+  Ruler,
+  Star,
+  Trees,
+  Tv,
+  Umbrella,
+  Wifi,
+  Wind,
+} from "lucide-react";
 import { site } from "@/data/site";
 import { copy } from "@/data/copy";
-import { highlights } from "@/data/content";
-import { easeOutExpo, fadeInUp, stagger } from "@/lib/motion";
+import { heroFeatures, heroRibbon } from "@/data/content";
+import { fadeInUp, stagger } from "@/lib/motion";
 import { useSite } from "@/components/providers/SiteProvider";
+
+const FEATURE_ICONS = {
+  shade: Trees,
+  evenings: Wind,
+  parking: Car,
+  entertainment: Tv,
+} as const;
+
+const RIBBON_ICONS = {
+  size: Ruler,
+  rooms: BedDouble,
+  beach: Umbrella,
+  wifi: Wifi,
+} as const;
+
+function ForestPattern() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.12]"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <pattern id="hero-forest" width="72" height="84" patternUnits="userSpaceOnUse">
+          <path
+            d="M36 8c8 10 12 18 12 28S44 54 36 62C28 54 24 46 24 36S28 18 36 8Z"
+            fill="none"
+            stroke="#C5A880"
+            strokeWidth="1.1"
+          />
+          <path d="M36 20v42" stroke="#C5A880" strokeWidth="0.8" />
+          <path
+            d="M12 48c4 6 7 11 7 16s-3 8-7 12c-4-4-7-7-7-12s3-10 7-16Z"
+            fill="none"
+            stroke="#C5A880"
+            strokeWidth="0.9"
+          />
+          <path
+            d="M60 46c4 6 7 11 7 16s-3 8-7 12c-4-4-7-7-7-12s3-10 7-16Z"
+            fill="none"
+            stroke="#C5A880"
+            strokeWidth="0.9"
+          />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hero-forest)" />
+    </svg>
+  );
+}
 
 export function HeroSection() {
   const { openBooking } = useSite();
-  const heroSrc = media.hero[0];
 
   return (
-    <section className="relative overflow-hidden px-4 pt-24 pb-10 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16">
+    <section className="relative overflow-hidden">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-24 right-[-8%] h-80 w-80 rounded-full bg-sage/10 blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-10 left-[-6%] h-72 w-72 rounded-full bg-gold/10 blur-3xl"
+        className="pointer-events-none absolute bottom-24 left-[-6%] h-72 w-72 rounded-full bg-gold/10 blur-3xl"
       />
 
-      <div className="mx-auto grid max-w-[1240px] items-center gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
+      <div className="mx-auto grid max-w-[1240px] items-center gap-10 px-4 pt-24 pb-10 sm:px-6 sm:pt-28 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:px-8 lg:pt-32 lg:pb-14">
         <motion.div variants={stagger} initial="hidden" animate="show" className="relative z-10">
           <motion.span
             variants={fadeInUp}
-            className="inline-flex items-center gap-2 rounded-full border border-gold/35 bg-white/55 px-4 py-1.5 text-[0.7rem] font-semibold tracking-[0.16em] text-forest uppercase shadow-sm backdrop-blur-md"
+            className="inline-flex items-center gap-2 rounded-full border border-gold/35 bg-white/70 px-4 py-1.5 text-[0.7rem] font-semibold tracking-[0.16em] text-forest uppercase shadow-sm backdrop-blur-md"
           >
             <Leaf className="size-3.5 text-gold" />
-            🌲 {copy.hero.badge}
+            {copy.hero.badge}
           </motion.span>
           <motion.h1
             variants={fadeInUp}
-            className="mt-5 font-heading text-[2.2rem] leading-[1.12] tracking-tight text-forest text-balance sm:text-5xl lg:text-[3.35rem]"
+            className="mt-6 font-heading text-4xl leading-[1.12] font-medium tracking-tight text-forest text-balance sm:text-5xl"
           >
             {site.tagline}
           </motion.h1>
           <motion.p variants={fadeInUp} className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-            {site.subTagline}
+            {copy.hero.lead}
           </motion.p>
           <motion.div variants={fadeInUp} className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <motion.button
@@ -55,65 +113,80 @@ export function HeroSection() {
               {copy.hero.ctaPrimary}
             </motion.button>
             <a
-              href="#galerija"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-sage bg-cream px-7 text-[0.78rem] font-semibold tracking-[0.14em] text-forest uppercase transition hover:bg-white"
+              href="#pogodnosti"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-sage/50 bg-transparent px-7 text-[0.78rem] font-semibold tracking-[0.14em] text-forest uppercase transition hover:border-gold hover:bg-white"
             >
-              <Images className="size-4" />
               {copy.hero.ctaSecondary}
             </a>
           </motion.div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: easeOutExpo }}
-          className="relative"
-        >
-          <div className="organic-frame relative aspect-[4/5] overflow-hidden shadow-[0_28px_70px_rgba(18,36,28,0.22)] sm:aspect-[5/6] lg:aspect-[4/5]">
-            <Image
-              src={heroSrc}
-              alt="Terasa Forest View apartmana u Dubovici"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 52vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-forest/70 via-forest/10 to-transparent" />
-            <div className="absolute top-4 left-4 rounded-full border border-white/25 bg-forest/45 px-3 py-1.5 text-[0.65rem] font-semibold tracking-[0.16em] text-gold uppercase backdrop-blur-md">
-              Pogled na šumu
-            </div>
-            <div className="absolute right-4 bottom-4 left-4">
-              <p className="font-heading text-2xl text-cream sm:text-3xl">Dvije terase u hladu</p>
-              <p className="mt-1 text-sm text-cream/80">Jutarnja kafa. Večernje vino. Prirodna svježina.</p>
-            </div>
-          </div>
-          <div className="absolute -bottom-5 -left-3 hidden rounded-3xl border border-gold/30 bg-cream/90 px-4 py-3 shadow-xl backdrop-blur-md sm:block">
-            <p className="text-[0.62rem] font-semibold tracking-[0.18em] text-gold uppercase">Booking.com</p>
-            <p className="font-heading text-2xl text-forest">
-              {site.rating.bookingScore}
-              <span className="ml-1 text-sm text-muted">/ 10</span>
+        <motion.div variants={fadeInUp} initial="hidden" animate="show">
+          <motion.article
+            whileHover={{ y: -6 }}
+            transition={{ type: "spring", stiffness: 260, damping: 22 }}
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-forest to-forest-deep p-8 text-cream shadow-2xl shadow-forest/30 md:p-10"
+          >
+          <ForestPattern />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-16 -right-10 h-44 w-44 rounded-full bg-gold/15 blur-3xl"
+          />
+          <div className="relative">
+            <p className="inline-flex items-center gap-2 rounded-full border border-gold/45 bg-gold/15 px-3.5 py-1.5 text-[0.68rem] font-semibold tracking-[0.12em] text-gold uppercase">
+              <Star className="size-3.5 fill-current" />
+              {copy.hero.ratingBadge}
+            </p>
+            <ul className="mt-8 space-y-2">
+              {heroFeatures.map((item) => {
+                const Icon = FEATURE_ICONS[item.id];
+                return (
+                  <li key={item.id}>
+                    <div className="group flex gap-4 rounded-2xl border border-transparent px-3 py-3 transition hover:border-gold/25 hover:bg-white/5">
+                      <span className="grid size-11 shrink-0 place-items-center rounded-2xl border border-gold/35 bg-white/5 text-gold transition group-hover:bg-gold group-hover:text-forest">
+                        <Icon className="size-5" />
+                      </span>
+                      <span>
+                        <span className="block font-heading text-lg text-cream">{item.title}</span>
+                        <span className="mt-0.5 block text-sm text-cream/70">{item.body}</span>
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mt-8 rounded-2xl border border-gold/20 bg-white/5 px-4 py-3 text-sm leading-relaxed text-cream/80">
+              {copy.hero.cardFooter}
             </p>
           </div>
+          </motion.article>
         </motion.div>
       </div>
 
       <motion.div
-        variants={stagger}
+        variants={fadeInUp}
         initial="hidden"
         animate="show"
-        className="mx-auto mt-12 flex max-w-[1240px] flex-wrap gap-2.5 lg:mt-16"
+        className="border-y border-gold/20 bg-forest"
       >
-        {highlights.map((item) => (
-          <motion.div
-            key={item.label}
-            variants={fadeInUp}
-            className="rounded-full border border-forest/10 bg-white/70 px-4 py-2.5 shadow-sm backdrop-blur-md"
-          >
-            <p className="text-[0.78rem] font-semibold tracking-wide text-forest">{item.label}</p>
-            <p className="text-[0.65rem] text-muted">{item.detail}</p>
-          </motion.div>
-        ))}
+        <div className="mx-auto grid max-w-[1240px] grid-cols-2 gap-px bg-gold/15 sm:grid-cols-4">
+          {heroRibbon.map((item) => {
+            const Icon = RIBBON_ICONS[item.id];
+            return (
+              <div
+                key={item.id}
+                className="flex items-center gap-3 bg-forest px-4 py-4 sm:justify-center sm:px-6 sm:py-5"
+              >
+                <span className="grid size-9 shrink-0 place-items-center rounded-full border border-gold/40 text-gold">
+                  <Icon className="size-4" />
+                </span>
+                <p className="text-[0.72rem] font-semibold tracking-[0.08em] text-cream uppercase sm:text-[0.78rem]">
+                  {item.label}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </motion.div>
     </section>
   );

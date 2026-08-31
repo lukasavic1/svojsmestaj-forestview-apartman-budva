@@ -5,7 +5,7 @@ const img = (name: string) => `/images/apartman/${name}.jpg`;
 export const media = {
   hero: [img("terrace-1"), img("living-1"), img("bedroom-1")],
   about: {
-    mosaic: [img("terrace-1"), img("living-2"), img("bedroom-3")],
+    mosaic: [img("terrace-1"), img("living-2"), img("living-1")],
   },
 } as const;
 
