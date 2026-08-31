@@ -65,10 +65,11 @@ export function BeachesSection() {
 
   const goTo = (index: number) => {
     const scroller = scrollerRef.current;
-    if (!scroller) return;
+    const card = scroller?.children[index] as HTMLElement | undefined;
+    if (!scroller || !card) return;
     setActive(index);
     ignoreScroll.current = true;
-    scroller.scrollTo({ left: index * scroller.clientWidth, behavior: "smooth" });
+    scroller.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
     window.setTimeout(() => {
       ignoreScroll.current = false;
     }, 450);
@@ -78,8 +79,19 @@ export function BeachesSection() {
     if (ignoreScroll.current) return;
     const scroller = scrollerRef.current;
     if (!scroller) return;
-    const next = Math.round(scroller.scrollLeft / Math.max(scroller.clientWidth, 1));
-    setActive(Math.min(beaches.length - 1, Math.max(0, next)));
+    const cards = Array.from(scroller.children) as HTMLElement[];
+    const mid = scroller.scrollLeft + scroller.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    cards.forEach((card, i) => {
+      const center = card.offsetLeft + card.offsetWidth / 2;
+      const dist = Math.abs(center - mid);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    });
+    setActive(best);
   };
 
   return (
@@ -129,10 +141,10 @@ export function BeachesSection() {
           <div
             ref={scrollerRef}
             onScroll={onCarouselScroll}
-            className="mt-4 flex h-[22rem] w-full min-w-0 snap-x snap-mandatory overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="mt-4 flex h-[22rem] w-full min-w-0 snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {beaches.map((beach) => (
-              <div key={beach.id} className="h-full min-w-full shrink-0 snap-start [flex:0_0_100%]">
+              <div key={beach.id} className="h-full min-w-0 shrink-0 snap-start [flex:0_0_calc(100%-0.75rem)]">
                 <BeachCard beach={beach} fillHeight />
               </div>
             ))}
@@ -194,7 +206,7 @@ export function BeachesSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="mt-4 hidden grid-cols-2 gap-4 md:grid"
+          className="mt-6 hidden grid-cols-2 gap-5 md:grid"
         >
           {rest.map((beach) => (
             <BeachCard key={beach.id} beach={beach} />

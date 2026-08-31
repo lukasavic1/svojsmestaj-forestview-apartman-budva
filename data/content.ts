@@ -15,7 +15,7 @@ export const heroFeatures = [
   {
     id: "evenings",
     title: "Prijatne večeri",
-    body: "Svjež vazduh i mir van gradske buke",
+    body: "Svjež vazduh iznad ljetnje žege",
   },
   {
     id: "parking",
@@ -89,7 +89,7 @@ export const amenities = [
     id: "family",
     icon: "family" as const,
     title: "Savršeno za porodice",
-    body: "Dva spavaća prostora, mašina za veš i suđe, parking i terase u hladu — Booking gosti nas biraju za porodična putovanja.",
+    body: "Dva spavaća prostora, mašina za veš i suđe i parking — Booking gosti nas biraju za porodična putovanja.",
   },
 ] as const;
 

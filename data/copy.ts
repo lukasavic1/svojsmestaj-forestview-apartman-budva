@@ -17,7 +17,7 @@ export const copy = {
     ctaSecondary: "Pogledaj sve pogodnosti",
     lead: "Prostran dvosoban stan sa dvije terase, okružen šumom i prirodnom svježinom. Potpuno opremljen za komforan i bezbrižan odmor porodica i parova.",
     ratingBadge: "9.6 / 10 · Izvanredno na Booking.com",
-    cardFooter: "Idealno za boravak porodica i parova koji žele komfor i mir u Budvi.",
+    cardFooter: "Idealno za boravak porodica i parova koji žele komfor u Budvi, bez ljetnje žege.",
   },
   about: {
     kicker: "O apartmanu",
@@ -26,6 +26,12 @@ export const copy = {
       "Dobrodošli u naš prostrani dvosobni stan smješten u jednom od najljepših i najmirnijih rezidencijalnih naselja u Budvi – Dubovici. Ako želite da uživate u svemu što Budva nudi, a da nakon uzbudljivog dana na plaži pobjegnete od ulične buke, betona i ljetnje žege, naš stan je savršen izbor za vas.",
       "Stan je u potpunosti opremljen za komforan i bezbrižan boravak porodica sa djecom ili parova koji planiraju duži odmor. Dnevni boravak je klimatizovan i idealan za popodnevno opuštanje, a stan posjeduje čak dva televizora sa bogatim paketom kablovskih kanala i besplatnim Netflix pristupom za vaše omiljene filmove i serije.",
       "Glavni adut ovog smještaja su dvije prostrane terase sa pogledom na šumu i bujno zelenilo, koje obezbjeđuju prirodnu hladovinu tokom cijelog dana. Zbog specifične lokacije i blizine šume, večeri kod nas su prijatne i svježe, što garantuje miran i kvalitetan san bez budvanske galame.",
+    ],
+    badge: "Dubovica · 75 m²",
+    pills: [
+      { id: "size", label: "75 m² · 2 sobe" },
+      { id: "family", label: "Porodice i parovi" },
+      { id: "comfort", label: "Klima + Netflix" },
     ],
   },
   amenities: {
@@ -54,7 +60,7 @@ export const copy = {
   gallery: {
     kicker: "Galerija",
     heading: "Šuma pred vratima. Komfor unutra.",
-    lead: "Dnevni boravak, terase u hladu, kuhinja, spavaće sobe i kupatila — prostor koji diše.",
+    lead: "Dnevni boravak, kuhinja, spavaće sobe i kupatila — prostor koji diše.",
     open: "Otvori fotografiju",
     more: "Još {n} fotografija",
     prev: "Prethodna fotografija",
@@ -64,7 +70,7 @@ export const copy = {
   reviews: {
     kicker: "Booking.com",
     heading: "Gosti nas ocjenjuju izvanredno",
-    lead: "Čistoća, mir šume, terase u hladu i brzi odgovor domaćina — to se ponavlja u recenzijama.",
+    lead: "Čistoća, opremljenost i brzi odgovor domaćina — to se ponavlja u recenzijama.",
     badge: "Izvanredno",
     basedOn: "Zasnovano na {n} verifikovanih recenzija",
     verified: "Verifikovani Booking.com gost",
