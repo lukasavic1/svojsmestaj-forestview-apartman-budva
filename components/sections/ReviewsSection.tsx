@@ -101,7 +101,7 @@ export function ReviewsSection() {
           ))}
         </div>
 
-        <div ref={desktopRef} className="mt-10 hidden lg:block">
+        <div ref={desktopRef} className="relative mt-10 hidden lg:block">
           <motion.div
             key={page}
             variants={stagger}
@@ -109,42 +109,40 @@ export function ReviewsSection() {
             animate="show"
             className="grid gap-6 lg:grid-cols-3"
           >
-          {visible.map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
+            {visible.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))}
           </motion.div>
+          <button
+            type="button"
+            aria-label={copy.reviews.prev}
+            onClick={() => step(-1)}
+            className="absolute top-1/2 -left-3 z-10 grid size-12 -translate-y-1/2 cursor-pointer place-items-center rounded-full border-2 border-gold bg-white text-forest shadow-lg shadow-forest/20 transition hover:scale-105 hover:bg-forest hover:text-gold active:scale-95 xl:-left-5"
+          >
+            <ChevronLeft className="size-5" strokeWidth={2.4} />
+          </button>
+          <button
+            type="button"
+            aria-label={copy.reviews.next}
+            onClick={() => step(1)}
+            className="absolute top-1/2 -right-3 z-10 grid size-12 -translate-y-1/2 cursor-pointer place-items-center rounded-full border-2 border-gold bg-forest text-gold shadow-lg shadow-forest/25 transition hover:scale-105 hover:bg-sage active:scale-95 xl:-right-5"
+          >
+            <ChevronRight className="size-5" strokeWidth={2.4} />
+          </button>
         </div>
 
-        <div className="mt-6 hidden items-center justify-between lg:flex">
-          <div className="flex gap-1.5">
-            {Array.from({ length: pages }).map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                aria-label={`${copy.reviews.next} ${i + 1}`}
-                onClick={() => setPage(i)}
-                className={`h-1.5 rounded-full transition-all ${i === page ? "w-7 bg-forest" : "w-2 bg-forest/20"}`}
-              />
-            ))}
-          </div>
-          <div className="flex gap-2">
+        <div className="mt-8 hidden items-center justify-center gap-3 lg:flex">
+          {Array.from({ length: pages }).map((_, i) => (
             <button
+              key={i}
               type="button"
-              aria-label={copy.reviews.prev}
-              onClick={() => step(-1)}
-              className="grid size-11 place-items-center rounded-full border border-forest/10 bg-white text-ink"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
-            <button
-              type="button"
-              aria-label={copy.reviews.next}
-              onClick={() => step(1)}
-              className="grid size-11 place-items-center rounded-full bg-forest text-gold"
-            >
-              <ChevronRight className="size-4" />
-            </button>
-          </div>
+              aria-label={`${copy.reviews.next} ${i + 1}`}
+              onClick={() => setPage(i)}
+              className={`h-2.5 cursor-pointer rounded-full transition-all ${
+                i === page ? "w-8 bg-forest" : "w-2.5 bg-forest/25 hover:bg-forest/50"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

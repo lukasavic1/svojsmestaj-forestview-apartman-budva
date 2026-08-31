@@ -5,30 +5,30 @@ import { useLayoutEffect } from "react";
 let lockCount = 0;
 let saved: {
   overflow: string;
-  position: string;
-  top: string;
-  width: string;
   htmlOverflow: string;
-  scrollY: number;
+  paddingRight: string;
+  overscroll: string;
+  htmlOverscroll: string;
 } | null = null;
 
 function lockBody() {
   if (typeof document === "undefined") return;
   if (lockCount === 0) {
     const { style } = document.body;
+    const html = document.documentElement;
+    const scrollbar = Math.max(0, window.innerWidth - html.clientWidth);
     saved = {
       overflow: style.overflow,
-      position: style.position,
-      top: style.top,
-      width: style.width,
-      htmlOverflow: document.documentElement.style.overflow,
-      scrollY: window.scrollY,
+      htmlOverflow: html.style.overflow,
+      paddingRight: style.paddingRight,
+      overscroll: style.overscrollBehavior,
+      htmlOverscroll: html.style.overscrollBehavior,
     };
+    html.style.overflow = "hidden";
+    html.style.overscrollBehavior = "none";
     style.overflow = "hidden";
-    style.position = "fixed";
-    style.top = `-${saved.scrollY}px`;
-    style.width = "100%";
-    document.documentElement.style.overflow = "hidden";
+    style.overscrollBehavior = "none";
+    if (scrollbar) style.paddingRight = `${scrollbar}px`;
   }
   lockCount += 1;
 }
@@ -38,12 +38,12 @@ function unlockBody() {
   lockCount -= 1;
   if (lockCount > 0 || !saved) return;
   const { style } = document.body;
+  const html = document.documentElement;
   style.overflow = saved.overflow;
-  style.position = saved.position;
-  style.top = saved.top;
-  style.width = saved.width;
-  document.documentElement.style.overflow = saved.htmlOverflow;
-  window.scrollTo({ top: saved.scrollY, left: 0, behavior: "auto" });
+  style.paddingRight = saved.paddingRight;
+  style.overscrollBehavior = saved.overscroll;
+  html.style.overflow = saved.htmlOverflow;
+  html.style.overscrollBehavior = saved.htmlOverscroll;
   saved = null;
 }
 

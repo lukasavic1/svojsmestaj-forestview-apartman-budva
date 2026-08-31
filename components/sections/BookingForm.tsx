@@ -38,11 +38,15 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const availability = getMockAvailability();
 
+  const skippedFirstScroll = useRef(false);
+
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-    return () => window.cancelAnimationFrame(frame);
+    if (!skippedFirstScroll.current) {
+      skippedFirstScroll.current = true;
+      return;
+    }
+    const scroller = formRef.current?.closest("[data-modal-scroll]");
+    if (scroller instanceof HTMLElement) scroller.scrollTo({ top: 0 });
   }, [step]);
 
   const nights = checkIn && checkOut ? nightsBetween(checkIn, checkOut) : 0;
