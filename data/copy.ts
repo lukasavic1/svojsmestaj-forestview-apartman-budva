@@ -154,6 +154,8 @@ export const copy = {
     rangeBlocked: "U odabranom periodu ima zauzetih dana.",
     minStay: "Minimalni boravak je 2 noćenja.",
     clearDates: "Obriši datume",
+    loading: "Učitavanje kalendara…",
+    unavailable: "Zauzete termine nismo uspjeli učitati. Datumi mogu biti netačni — pišite nam za potvrdu.",
   },
   footer: {
     tagline: "Zelena oaza mira u Dubovici — Budva, Crna Gora.",

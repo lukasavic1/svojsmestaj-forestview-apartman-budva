@@ -4,10 +4,11 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MessageSquare, Phone, User, Users } from "lucide-react";
 import { copy } from "@/data/copy";
 import { site } from "@/data/site";
-import { getMockAvailability } from "@/data/mock-availability";
+import { emptyAvailability } from "@/lib/availability";
 import { formatLongDate, nightsBetween, rangeHasBookedNight } from "@/lib/calendar";
 import { formatInquiryMessage } from "@/lib/whatsapp";
 import { RangeCalendar } from "@/components/ui/RangeCalendar";
+import type { AvailabilityPayload } from "@/types/calendar";
 import type { BookingReceipt } from "./BookingSuccessModal";
 
 const fieldClass =
@@ -36,9 +37,32 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const availability = getMockAvailability();
+  const [availability, setAvailability] = useState<AvailabilityPayload | null>(null);
+  const [availabilityError, setAvailabilityError] = useState(false);
 
   const skippedFirstScroll = useRef(false);
+
+  useEffect(() => {
+    let live = true;
+    fetch("/api/availability")
+      .then(async (res) => {
+        if (!res.ok) throw new Error("unavailable");
+        return (await res.json()) as AvailabilityPayload;
+      })
+      .then((data) => {
+        if (!live) return;
+        setAvailability(data);
+        setAvailabilityError(false);
+      })
+      .catch(() => {
+        if (!live) return;
+        setAvailability(emptyAvailability());
+        setAvailabilityError(true);
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!skippedFirstScroll.current) {
@@ -65,7 +89,7 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
       setStep(1);
       return;
     }
-    if (rangeHasBookedNight(availability.booked, checkIn, checkOut)) {
+    if (!availability || rangeHasBookedNight(availability.booked, checkIn, checkOut)) {
       setError(copy.calendar.rangeBlocked);
       setStep(1);
       return;
@@ -138,16 +162,27 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
 
         {step === 1 ? (
           <div>
-            <RangeCalendar
-              availability={availability}
-              checkIn={checkIn}
-              checkOut={checkOut}
-              onChange={(start, end) => {
-                setCheckIn(start);
-                setCheckOut(end);
-                setError(null);
-              }}
-            />
+            {availabilityError ? (
+              <p className="mb-4 rounded-xl border border-gold/50 bg-gold/10 px-3 py-2 text-sm text-ink" role="status">
+                {copy.calendar.unavailable}
+              </p>
+            ) : null}
+            {availability ? (
+              <RangeCalendar
+                availability={availability}
+                checkIn={checkIn}
+                checkOut={checkOut}
+                onChange={(start, end) => {
+                  setCheckIn(start);
+                  setCheckOut(end);
+                  setError(null);
+                }}
+              />
+            ) : (
+              <div className="flex min-h-[22rem] items-center justify-center rounded-3xl border border-forest/10 bg-white/80">
+                <p className="text-sm text-muted">{copy.calendar.loading}</p>
+              </div>
+            )}
             {checkIn && checkOut ? (
               <div className="mt-5 rounded-2xl border border-gold/40 bg-gold/10 px-4 py-3">
                 <p className="text-sm text-ink">
@@ -236,7 +271,7 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
             <button
               type="button"
               onClick={() => canAdvanceDates && setStep(2)}
-              disabled={!canAdvanceDates}
+              disabled={!canAdvanceDates || !availability}
               className={btnPrimary}
             >
               {copy.booking.next}

@@ -1,6 +1,8 @@
-import type { YearMonth } from "@/types/calendar";
+import type { AvailabilityPayload, YearMonth } from "@/types/calendar";
 
-export function availabilityWindow(months = 12): {
+export const AVAILABILITY_MONTHS = 12;
+
+export function availabilityWindow(months = AVAILABILITY_MONTHS): {
   first: YearMonth;
   last: YearMonth;
 } {
@@ -11,4 +13,9 @@ export function availabilityWindow(months = 12): {
     first,
     last: { year: lastDate.getFullYear(), month: lastDate.getMonth() },
   };
+}
+
+export function emptyAvailability(unitId = "forest-view"): AvailabilityPayload {
+  const { first, last } = availabilityWindow();
+  return { unitId, fullyBooked: false, booked: {}, first, last };
 }
