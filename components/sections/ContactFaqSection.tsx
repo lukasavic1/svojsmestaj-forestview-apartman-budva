@@ -1,41 +1,24 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDown, Clock, MapPin, MessageCircle, Phone } from "lucide-react";
 import { faqs } from "@/data/faq";
 import { copy } from "@/data/copy";
 import { site } from "@/data/site";
-import { formatInquiryMessage, telHref, viberHref, whatsappHref } from "@/lib/whatsapp";
+import { telHref, viberHref, whatsappHref } from "@/lib/whatsapp";
 import { ViberIcon, WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { useSite } from "@/components/providers/SiteProvider";
 
-const fieldClass =
-  "h-12 w-full rounded-2xl border border-forest/10 bg-white px-4 text-sm text-ink outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/25";
-
 export function ContactFaqSection() {
   const { openBooking } = useSite();
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
   const address = `${site.location.street}, ${site.location.city}`;
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (name.trim().length < 2 || phone.trim().length < 6) return;
-    window.open(
-      whatsappHref(formatInquiryMessage({ name: name.trim(), phone: phone.trim(), message })),
-      "_blank",
-      "noopener,noreferrer"
-    );
-  };
 
   return (
     <section id="kontakt" className="px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
       <div className="mx-auto max-w-[1240px]">
         <div className="grid items-stretch gap-8 lg:grid-cols-2">
-          <div className="flex h-full flex-col rounded-3xl border border-forest/8 bg-white/80 p-6 shadow-xl shadow-forest/8 md:p-8">
+          <div className="flex h-full min-w-0 flex-col rounded-3xl border border-forest/8 bg-white/80 p-6 shadow-xl shadow-forest/8 md:p-8">
             <SectionHeading kicker={copy.contact.kicker} heading={copy.contact.heading} lead={copy.contact.lead} />
             <p className="mt-6 text-[0.68rem] tracking-[0.18em] text-sage uppercase">{copy.contact.hostsLabel}</p>
             <p className="mt-1 font-heading text-2xl text-forest">{site.hosts}</p>
@@ -43,7 +26,7 @@ export function ContactFaqSection() {
             <dl className="mt-6 space-y-4 text-sm">
               <div className="flex items-start gap-3">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-gold" />
-                <div>
+                <div className="min-w-0">
                   <dt className="text-[0.68rem] font-semibold tracking-[0.12em] text-muted uppercase">
                     {copy.contact.addressLabel}
                   </dt>
@@ -111,94 +94,40 @@ export function ContactFaqSection() {
                 <span className="truncate">{copy.contact.viberCta}</span>
               </a>
             </div>
+            <button
+              type="button"
+              onClick={openBooking}
+              className="mt-2 inline-flex h-12 w-full items-center justify-center rounded-full border border-sage text-[0.68rem] font-semibold tracking-[0.1em] text-forest uppercase hover:bg-gold/15"
+            >
+              {copy.nav.book}
+            </button>
           </div>
 
-          <form
-            onSubmit={onSubmit}
-            className="flex h-full flex-col rounded-3xl border border-forest/8 bg-cream p-6 shadow-xl shadow-forest/8 md:p-8"
-          >
-            <p className="text-[0.72rem] font-semibold tracking-[0.22em] text-sage uppercase">{copy.contact.formSubmit}</p>
-            <h3 className="mt-2 font-heading text-3xl text-forest">Pošaljite kratki upit</h3>
-            <p className="mt-2 text-sm text-muted">{copy.contact.lead}</p>
-            <div className="mt-6 flex min-h-0 flex-1 flex-col gap-3">
-              <label className="block">
-                <span className="mb-1.5 block text-[0.68rem] font-semibold tracking-[0.14em] text-muted uppercase">
-                  {copy.contact.formName}
-                </span>
-                <input className={fieldClass} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-              </label>
-              <label className="block">
-                <span className="mb-1.5 block text-[0.68rem] font-semibold tracking-[0.14em] text-muted uppercase">
-                  {copy.contact.formPhone}
-                </span>
-                <input
-                  className={fieldClass}
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  autoComplete="tel"
-                  required
-                />
-              </label>
-              <label className="flex min-h-0 flex-1 flex-col">
-                <span className="mb-1.5 block text-[0.68rem] font-semibold tracking-[0.14em] text-muted uppercase">
-                  {copy.contact.formMessage}
-                </span>
-                <textarea
-                  rows={5}
-                  placeholder={copy.contact.formHint}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="min-h-[8.5rem] w-full flex-1 rounded-2xl border border-forest/10 bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/25"
-                />
-              </label>
-            </div>
-            <div className="mt-auto grid grid-cols-2 gap-2 pt-6">
-              <button
-                type="submit"
-                className="btn-emerald-gold inline-flex h-12 items-center justify-center rounded-full text-[0.68rem] font-semibold tracking-[0.1em] uppercase"
-              >
-                {copy.contact.formSubmit}
-              </button>
-              <button
-                type="button"
-                onClick={openBooking}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-sage text-[0.68rem] font-semibold tracking-[0.1em] text-forest uppercase hover:bg-gold/15"
-              >
-                {copy.nav.book}
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div className="mt-10 rounded-3xl border border-forest/8 bg-white/80 p-6 shadow-xl shadow-forest/8 md:p-8">
-          <p className="text-[0.72rem] font-semibold tracking-[0.22em] text-sage uppercase">{copy.contact.faqKicker}</p>
-          <h3 className="mt-2 font-heading text-3xl text-forest md:text-4xl">{copy.contact.faqHeading}</h3>
-          <p className="mt-2 max-w-3xl text-sm text-muted">{copy.contact.faqLead}</p>
-          <Accordion.Root type="multiple" defaultValue={[faqs[0].id]} className="mt-6 grid items-start gap-x-8 md:grid-cols-2">
-            {[faqs.filter((_, i) => i % 2 === 0), faqs.filter((_, i) => i % 2 === 1)].map((column, col) => (
-              <div key={col}>
-                {column.map((item) => (
-                  <Accordion.Item key={item.id} value={item.id} className="border-b border-forest/10">
-                    <Accordion.Header>
-                      <Accordion.Trigger className="group flex w-full items-start justify-between gap-4 py-4 text-left">
-                        <span className="font-heading text-base text-forest sm:text-lg">{item.question}</span>
-                        <ChevronDown className="mt-1 size-5 shrink-0 text-gold transition-transform duration-300 ease-out group-data-[state=open]:rotate-180" />
-                      </Accordion.Trigger>
-                    </Accordion.Header>
-                    <Accordion.Content
-                      forceMount
-                      className="grid transition-[grid-template-rows] duration-300 ease-out data-[state=closed]:grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]"
-                    >
-                      <div className="min-h-0 overflow-hidden">
-                        <p className="pb-4 text-sm leading-relaxed text-muted">{item.answer}</p>
-                      </div>
-                    </Accordion.Content>
-                  </Accordion.Item>
-                ))}
-              </div>
-            ))}
-          </Accordion.Root>
+          <div className="flex h-full min-w-0 flex-col rounded-3xl border border-forest/8 bg-white/80 p-6 shadow-xl shadow-forest/8 md:p-8">
+            <p className="text-[0.72rem] font-semibold tracking-[0.22em] text-sage uppercase">{copy.contact.faqKicker}</p>
+            <h3 className="mt-2 font-heading text-3xl text-forest md:text-4xl">{copy.contact.faqHeading}</h3>
+            <p className="mt-2 text-sm text-muted">{copy.contact.faqLead}</p>
+            <Accordion.Root type="single" collapsible defaultValue={faqs[0].id} className="mt-4">
+              {faqs.map((item) => (
+                <Accordion.Item key={item.id} value={item.id} className="border-b border-forest/10">
+                  <Accordion.Header>
+                    <Accordion.Trigger className="group flex w-full items-start justify-between gap-4 py-3.5 text-left">
+                      <span className="font-heading text-[0.95rem] text-forest sm:text-lg">{item.question}</span>
+                      <ChevronDown className="mt-1 size-5 shrink-0 text-gold transition-transform duration-300 ease-out group-data-[state=open]:rotate-180" />
+                    </Accordion.Trigger>
+                  </Accordion.Header>
+                  <Accordion.Content
+                    forceMount
+                    className="grid transition-[grid-template-rows] duration-300 ease-out data-[state=closed]:grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]"
+                  >
+                    <div className="min-h-0 overflow-hidden">
+                      <p className="pb-3.5 text-sm leading-relaxed text-muted">{item.answer}</p>
+                    </div>
+                  </Accordion.Content>
+                </Accordion.Item>
+              ))}
+            </Accordion.Root>
+          </div>
         </div>
       </div>
     </section>

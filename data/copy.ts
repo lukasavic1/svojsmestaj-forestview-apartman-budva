@@ -56,6 +56,7 @@ export const copy = {
     heading: "Šuma pred vratima. Komfor unutra.",
     lead: "Dnevni boravak, terase u hladu, kuhinja, spavaće sobe i kupatila — prostor koji diše.",
     open: "Otvori fotografiju",
+    more: "Još {n} fotografija",
     prev: "Prethodna fotografija",
     next: "Sljedeća fotografija",
     close: "Zatvori",
@@ -73,7 +74,7 @@ export const copy = {
   contact: {
     kicker: "Kontakt",
     heading: "Pišite nam direktno",
-    lead: "Odgovaramo brzo na WhatsApp i Viber. Za rezervaciju možete i popuniti kratki upit.",
+    lead: "Odgovaramo brzo na WhatsApp i Viber. Za termine otvorite rezervaciju na sajtu.",
     hostsLabel: "Domaćini",
     addressLabel: "Adresa",
     phoneLabel: "Telefon",
@@ -84,9 +85,8 @@ export const copy = {
     whatsappCta: "WhatsApp",
     viberCta: "Viber",
     faqKicker: "Česta pitanja",
-    faqHeading: "Sve što treba da znate",
-    faqLead:
-      "Često postavljana pitanja o objektu Forest View Modern 2BR Apartman Budva — odgovori sa Bookinga, plus ono što gosti pitaju prije dolaska.",
+    faqHeading: "Brzi odgovori",
+    faqLead: "Prijava, plaža, parking i kapacitet — ukratko.",
     formName: "Ime i prezime",
     formPhone: "Telefon / WhatsApp",
     formMessage: "Poruka",

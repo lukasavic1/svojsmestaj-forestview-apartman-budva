@@ -124,6 +124,7 @@ export const beaches = [
   {
     id: "slovenska",
     name: "Slovenska plaža",
+    shortName: "Slovenska",
     distance: "1,7 km",
     tag: "Porodična klasika",
     vibe: "Najduži pijesak u gradu",
@@ -134,6 +135,7 @@ export const beaches = [
   {
     id: "ricardova",
     name: "Plaža Ričardova glava",
+    shortName: "Ričardova",
     distance: "2,3 km",
     tag: "Uz Stari grad",
     vibe: "Kupanje uz zidine",
@@ -143,6 +145,7 @@ export const beaches = [
   {
     id: "pizana",
     name: "Plaža Pizana",
+    shortName: "Pizana",
     distance: "2,4 km",
     tag: "Ispod citadele",
     vibe: "Džep pijeska uz kamen",
@@ -152,6 +155,7 @@ export const beaches = [
   {
     id: "mogren",
     name: "Plaža Mogren",
+    shortName: "Mogren",
     distance: "2,5 km",
     tag: "Kroz tunel",
     vibe: "Dva zaliva, jedna razglednica",
@@ -161,6 +165,7 @@ export const beaches = [
   {
     id: "dukley",
     name: "Plaža Dukley",
+    shortName: "Dukley",
     distance: "2,5 km",
     tag: "Sunset lounge",
     vibe: "Istočni kraj Slovenske",

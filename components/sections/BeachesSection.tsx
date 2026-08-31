@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDownRight, Footprints, Waves } from "lucide-react";
@@ -11,15 +12,20 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 function BeachCard({
   beach,
   featured = false,
+  fillHeight = false,
 }: {
   beach: (typeof beaches)[number];
   featured?: boolean;
+  fillHeight?: boolean;
 }) {
   return (
-    <motion.article
-      variants={fadeInUp}
+    <article
       className={`group relative overflow-hidden rounded-3xl ${
-        featured ? "min-h-[22rem] sm:min-h-[32rem]" : "min-h-[17rem] sm:min-h-[20rem]"
+        fillHeight
+          ? "h-full min-h-0"
+          : featured
+            ? "min-h-[22rem] sm:min-h-[32rem]"
+            : "min-h-[20rem]"
       }`}
     >
       <Image
@@ -43,16 +49,38 @@ function BeachCard({
         <h3 className={`mt-1 font-heading text-cream ${featured ? "text-3xl sm:text-5xl" : "text-2xl"}`}>
           {beach.name}
         </h3>
-        <p className={`mt-2 text-cream/85 ${featured ? "max-w-lg text-base sm:text-lg" : "text-sm"}`}>
+        <p className={`mt-2 text-cream/85 ${featured ? "max-w-lg text-base sm:text-lg" : "line-clamp-3 text-sm"}`}>
           {beach.body}
         </p>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
 export function BeachesSection() {
+  const [active, setActive] = useState(0);
   const [featured, ...rest] = beaches;
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const ignoreScroll = useRef(false);
+
+  const goTo = (index: number) => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    setActive(index);
+    ignoreScroll.current = true;
+    scroller.scrollTo({ left: index * scroller.clientWidth, behavior: "smooth" });
+    window.setTimeout(() => {
+      ignoreScroll.current = false;
+    }, 450);
+  };
+
+  const onCarouselScroll = () => {
+    if (ignoreScroll.current) return;
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    const next = Math.round(scroller.scrollLeft / Math.max(scroller.clientWidth, 1));
+    setActive(Math.min(beaches.length - 1, Math.max(0, next)));
+  };
 
   return (
     <section id="plaze" className="relative overflow-hidden bg-forest px-4 py-14 text-cream sm:px-6 lg:px-8 lg:py-20">
@@ -68,10 +96,61 @@ export function BeachesSection() {
             lead={copy.beaches.lead}
             light
           />
-          <p className="inline-flex max-w-sm items-start gap-2 rounded-3xl border border-gold/30 bg-white/5 px-4 py-3 text-sm text-cream/80 backdrop-blur-md">
+          <p className="hidden max-w-sm items-start gap-2 rounded-3xl border border-gold/30 bg-white/5 px-4 py-3 text-sm text-cream/80 backdrop-blur-md sm:inline-flex">
             <Waves className="mt-0.5 size-4 shrink-0 text-gold" />
             {copy.beaches.itinerary}
           </p>
+        </div>
+
+        <div className="mt-8 min-w-0 md:hidden">
+          <div className="grid grid-cols-5 gap-1">
+            {beaches.map((beach, i) => (
+              <button
+                key={beach.id}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-pressed={i === active}
+                className={`min-w-0 rounded-2xl border px-1 py-2 text-center transition ${
+                  i === active
+                    ? "border-gold bg-gold text-forest"
+                    : "border-gold/30 bg-white/5 text-cream/80"
+                }`}
+              >
+                <span className="block truncate text-[0.58rem] font-semibold tracking-[0.04em] uppercase">
+                  {beach.shortName}
+                </span>
+                <span className={`mt-0.5 block text-[0.52rem] tracking-wide ${i === active ? "text-forest/70" : "text-gold/80"}`}>
+                  {beach.distance}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div
+            ref={scrollerRef}
+            onScroll={onCarouselScroll}
+            className="mt-4 flex h-[22rem] w-full min-w-0 snap-x snap-mandatory overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {beaches.map((beach) => (
+              <div key={beach.id} className="h-full min-w-full shrink-0 snap-start [flex:0_0_100%]">
+                <BeachCard beach={beach} fillHeight />
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-3 flex justify-center gap-1.5">
+            {beaches.map((beach, i) => (
+              <button
+                key={beach.id}
+                type="button"
+                aria-label={beach.name}
+                onClick={() => goTo(i)}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === active ? "w-6 bg-gold" : "w-1.5 bg-cream/30"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         <motion.ol
@@ -79,13 +158,13 @@ export function BeachesSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="mt-10 grid grid-cols-2 gap-2 sm:grid-cols-5 sm:gap-3"
+          className="mt-10 hidden grid-cols-5 gap-3 md:grid"
         >
           {beaches.map((beach, i) => (
             <motion.li
               key={beach.id}
               variants={fadeInUp}
-              className="relative rounded-2xl border border-gold/20 bg-white/5 px-3 py-3 sm:px-4"
+              className="relative rounded-2xl border border-gold/20 bg-white/5 px-4 py-3"
             >
               <span className="font-heading text-2xl leading-none text-gold/80">{String(i + 1).padStart(2, "0")}</span>
               <p className="mt-2 font-heading text-lg leading-tight text-cream">{beach.name}</p>
@@ -94,7 +173,7 @@ export function BeachesSection() {
                 {beach.distance}
               </p>
               {i < beaches.length - 1 ? (
-                <ArrowDownRight className="absolute top-3 right-2 hidden size-4 text-gold/40 sm:block lg:rotate-[-20deg]" />
+                <ArrowDownRight className="absolute top-3 right-2 size-4 text-gold/40 lg:rotate-[-20deg]" />
               ) : null}
             </motion.li>
           ))}
@@ -105,7 +184,7 @@ export function BeachesSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="mt-8"
+          className="mt-8 hidden md:block"
         >
           <BeachCard beach={featured} featured />
         </motion.div>
@@ -115,7 +194,7 @@ export function BeachesSection() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-8% 0px" }}
-          className="mt-3 grid gap-3 sm:mt-4 sm:grid-cols-2 sm:gap-4"
+          className="mt-4 hidden grid-cols-2 gap-4 md:grid"
         >
           {rest.map((beach) => (
             <BeachCard key={beach.id} beach={beach} />
