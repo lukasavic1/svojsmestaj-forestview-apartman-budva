@@ -23,6 +23,10 @@ yarn-error.log*
 .env*.local
 .env
 
+# scrape dumps
+scripts/_booking-dump.html
+scripts/booking-meta.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

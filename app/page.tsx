@@ -1,9 +1,11 @@
-import { BUSINESS_NAME } from "@/config";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { PropertySite } from "@/components/PropertySite";
 
 export default function Home() {
   return (
-    <main>
-      <h1>{BUSINESS_NAME} Website In Progress</h1>
-    </main>
+    <>
+      <JsonLd />
+      <PropertySite />
+    </>
   );
 }

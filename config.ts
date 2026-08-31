@@ -2,4 +2,4 @@
  * Konfiguracija sajta.
  * Za svaki novi klijentski sajt promeni SAMO ovu vrednost.
  */
-export const BUSINESS_NAME = "SvojSmestaj";
+export const BUSINESS_NAME = "Forest View Budva";

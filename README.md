@@ -1,16 +1,6 @@
-# SvojSmestaj — Starter Template
+# Forest View Modern Apartment Budva
 
-Minimalni Next.js (App Router, TypeScript) starter za sajtove klijenata koji
-izdaju smeštaj. Svež deploy prikazuje placeholder stranicu "Website In Progress".
-
-## Prilagođavanje za novog klijenta
-
-Otvori [`config.ts`](./config.ts) i promeni **`BUSINESS_NAME`** — prikazuje se na
-stranici:
-
-```ts
-export const BUSINESS_NAME = "Ime Klijenta";
-```
+Jednostranični sajt za dvosoban stan u Dubovici, Budva — zelena oaza mira sa dvije terase u hladu šume.
 
 ## Pokretanje
 
@@ -25,3 +15,7 @@ npm run dev      # http://localhost:3000
 npm run build
 npm run start
 ```
+
+## Kontakt
+
+Broj telefona / WhatsApp / Viber mijenja se u [`data/site.ts`](./data/site.ts) (`contact.phoneDisplay` i `contact.whatsappRaw`).
