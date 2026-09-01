@@ -7,6 +7,7 @@ import {
   CalendarCheck,
   Leaf,
   Ruler,
+  Sparkles,
   Star,
   Trees,
   Tv,
@@ -101,23 +102,42 @@ export function HeroSection() {
           <motion.p variants={fadeInUp} className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
             {copy.hero.lead}
           </motion.p>
-          <motion.div variants={fadeInUp} className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <motion.button
-              type="button"
-              onClick={openBooking}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              className="btn-emerald-gold gold-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 text-[0.78rem] font-semibold tracking-[0.14em] uppercase"
-            >
-              <CalendarCheck className="size-4" />
-              {copy.hero.ctaPrimary}
-            </motion.button>
-            <a
-              href="#pogodnosti"
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-sage/50 bg-transparent px-7 text-[0.78rem] font-semibold tracking-[0.14em] text-forest uppercase transition hover:border-gold hover:bg-white"
-            >
-              {copy.hero.ctaSecondary}
-            </a>
+          <motion.div variants={fadeInUp} className="mt-8 max-w-xl">
+            <div className="grid grid-cols-[1.2fr_0.8fr] overflow-hidden rounded-2xl border border-gold/35 bg-white shadow-md shadow-forest/10 sm:hidden">
+              <button
+                type="button"
+                onClick={openBooking}
+                className="btn-emerald-gold inline-flex min-h-14 items-center justify-center gap-1.5 rounded-none px-2 text-center text-[0.65rem] leading-tight font-semibold tracking-[0.06em] uppercase shadow-none [box-shadow:none]"
+              >
+                <CalendarCheck className="size-4 shrink-0" />
+                {copy.hero.ctaPrimary}
+              </button>
+              <a
+                href="#pogodnosti"
+                className="inline-flex min-h-14 items-center justify-center gap-1.5 border-l border-gold/25 bg-cream px-3 text-[0.68rem] font-semibold tracking-[0.08em] text-forest uppercase"
+              >
+                <Sparkles className="size-3.5 shrink-0 text-gold" />
+                {copy.hero.ctaSecondaryShort}
+              </a>
+            </div>
+            <div className="hidden sm:flex sm:flex-row sm:items-center sm:gap-3">
+              <motion.button
+                type="button"
+                onClick={openBooking}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-emerald-gold gold-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 text-[0.78rem] font-semibold tracking-[0.14em] uppercase"
+              >
+                <CalendarCheck className="size-4" />
+                {copy.hero.ctaPrimary}
+              </motion.button>
+              <a
+                href="#pogodnosti"
+                className="inline-flex min-h-12 items-center justify-center rounded-full border border-sage/50 px-7 text-[0.78rem] font-semibold tracking-[0.14em] text-forest uppercase transition hover:border-gold hover:bg-white"
+              >
+                {copy.hero.ctaSecondary}
+              </a>
+            </div>
           </motion.div>
         </motion.div>
 

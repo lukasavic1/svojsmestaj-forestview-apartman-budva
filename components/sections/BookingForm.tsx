@@ -8,6 +8,7 @@ import { emptyAvailability } from "@/lib/availability";
 import { formatLongDate, nightsBetween, rangeHasBookedNight } from "@/lib/calendar";
 import { formatInquiryMessage } from "@/lib/whatsapp";
 import { RangeCalendar } from "@/components/ui/RangeCalendar";
+import { CalendarSkeleton } from "@/components/ui/CalendarSkeleton";
 import type { AvailabilityPayload } from "@/types/calendar";
 import type { BookingReceipt } from "./BookingSuccessModal";
 
@@ -179,18 +180,18 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
                 }}
               />
             ) : (
-              <div className="flex min-h-[22rem] items-center justify-center rounded-3xl border border-forest/10 bg-white/80">
-                <p className="text-sm text-muted">{copy.calendar.loading}</p>
-              </div>
+              <CalendarSkeleton />
             )}
             {checkIn && checkOut ? (
-              <div className="mt-5 rounded-2xl border border-gold/40 bg-gold/10 px-4 py-3">
+              <div className="mt-5 min-h-[4.25rem] rounded-2xl border border-gold/40 bg-gold/10 px-4 py-3">
                 <p className="text-sm text-ink">
                   <span className="font-semibold">{copy.booking.selectedRange}:</span> {periodLabel} (
                   {nights} {nights === 1 ? copy.booking.night : copy.booking.nights})
                 </p>
               </div>
-            ) : null}
+            ) : (
+              <div className="mt-5 min-h-[4.25rem]" aria-hidden />
+            )}
           </div>
         ) : null}
 

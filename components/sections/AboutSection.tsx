@@ -28,6 +28,43 @@ function Highlight({ children }: { children: string }) {
   return <strong className="font-semibold text-forest">{children}</strong>;
 }
 
+function AboutCopy({ className, reveal = false }: { className?: string; reveal?: boolean }) {
+  const paragraphs = [
+    <p key="p1">
+      Dobrodošli u naš prostrani dvosobni stan smješten u jednom od najljepših rezidencijalnih naselja u Budvi —{" "}
+      <Highlight>Dubovici</Highlight>. Ako želite da uživate u svemu što Budva nudi, a da nakon uzbudljivog dana na plaži
+      pobjegnete od <Highlight>ulične buke, betona i ljetnje žege</Highlight>, naš stan je savršen izbor za vas.
+    </p>,
+    <p key="p2">
+      Stan je u potpunosti opremljen za komforan i bezbrižan boravak{" "}
+      <Highlight>porodica sa djecom ili parova</Highlight> koji planiraju duži odmor. Dnevni boravak je klimatizovan i
+      idealan za popodnevno opuštanje, a stan posjeduje čak{" "}
+      <Highlight>dva televizora sa kablovskom i Netflixom</Highlight> za vaše omiljene filmove i serije.
+    </p>,
+    <p key="p3">{copy.about.body[2]}</p>,
+  ];
+
+  if (!reveal) {
+    return <div className={className}>{paragraphs}</div>;
+  }
+
+  return (
+    <div className={className}>
+      {paragraphs.map((paragraph, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.55, margin: "0px 0px -12% 0px" }}
+          transition={{ duration: 0.85, ease: easeOutExpo, delay: i * 0.12 }}
+        >
+          {paragraph}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function LocationMark({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
@@ -70,15 +107,22 @@ export function AboutSection() {
         <div className="md:hidden">
           <SectionHeading kicker={copy.about.kicker} heading={copy.about.heading} />
 
-          <div className="relative mt-6">
+          <div className="relative mt-6 overflow-hidden rounded-2xl shadow-xl shadow-forest/10">
             <div
               ref={scrollerRef}
               onScroll={onPhotoScroll}
-              className="flex aspect-[16/10] snap-x snap-mandatory overflow-x-auto overscroll-x-contain rounded-2xl shadow-xl shadow-forest/10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="flex aspect-[16/10] snap-x snap-mandatory overflow-x-auto overflow-y-hidden overscroll-x-contain touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {MOSAIC.map((src, i) => (
                 <div key={src} className="relative h-full min-w-full shrink-0 snap-start [flex:0_0_100%]">
-                  <Image src={src} alt={MOSAIC_ALTS[i]} fill sizes="100vw" className="object-cover" />
+                  <Image
+                    src={src}
+                    alt={MOSAIC_ALTS[i]}
+                    fill
+                    draggable={false}
+                    sizes="100vw"
+                    className="pointer-events-none object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -115,19 +159,7 @@ export function AboutSection() {
             })}
           </div>
 
-          <div className="mt-5 space-y-4 text-[0.95rem] leading-relaxed text-ink/80">
-            {copy.about.body.map((paragraph) => (
-              <motion.p
-                key={paragraph.slice(0, 40)}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.55, margin: "0px 0px -12% 0px" }}
-                transition={{ duration: 0.95, ease: easeOutExpo }}
-              >
-                {paragraph}
-              </motion.p>
-            ))}
-          </div>
+          <AboutCopy reveal className="mt-5 space-y-4 text-[0.95rem] leading-relaxed text-ink/80" />
 
           <LocationMark compact />
         </div>
@@ -158,21 +190,7 @@ export function AboutSection() {
             className="rounded-3xl border border-white/80 bg-white/85 p-6 shadow-[0_20px_50px_rgba(27,59,43,0.08)] sm:p-9"
           >
             <SectionHeading kicker={copy.about.kicker} heading={copy.about.heading} />
-            <div className="mt-6 space-y-4 text-[0.98rem] leading-relaxed text-ink/80">
-              <p>
-                Dobrodošli u naš prostrani dvosobni stan smješten u jednom od najljepših rezidencijalnih naselja u Budvi —{" "}
-                <Highlight>Dubovici</Highlight>. Ako želite da uživate u svemu što Budva nudi, a da nakon uzbudljivog dana na
-                plaži pobjegnete od <Highlight>ulične buke, betona i ljetnje žege</Highlight>, naš stan je savršen izbor za
-                vas.
-              </p>
-              <p>
-                Stan je u potpunosti opremljen za komforan i bezbrižan boravak{" "}
-                <Highlight>porodica sa djecom ili parova</Highlight> koji planiraju duži odmor. Dnevni boravak je
-                klimatizovan i idealan za popodnevno opuštanje, a stan posjeduje čak{" "}
-                <Highlight>dva televizora sa kablovskom i Netflixom</Highlight> za vaše omiljene filmove i serije.
-              </p>
-              <p>{copy.about.body[2]}</p>
-            </div>
+            <AboutCopy className="mt-6 space-y-4 text-[0.98rem] leading-relaxed text-ink/80" />
             <LocationMark />
           </motion.article>
         </div>

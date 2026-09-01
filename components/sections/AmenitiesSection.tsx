@@ -69,22 +69,22 @@ export function AmenitiesSection() {
               );
             })}
           </div>
-          <article className="mt-3 rounded-3xl border border-gold/30 bg-gradient-to-br from-forest to-forest-deep px-4 py-3.5 text-cream shadow-xl shadow-forest/15">
-            <AnimatePresence mode="wait" initial={false}>
+          <article className="relative mt-3 h-[7.75rem] overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-forest to-forest-deep text-cream shadow-lg shadow-forest/15">
+            <AnimatePresence initial={false}>
               <motion.div
                 key={active.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="flex items-start gap-3"
+                transition={{ duration: 0.16 }}
+                className="absolute inset-0 flex items-start gap-2.5 px-3.5 py-3"
               >
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-gold/40 bg-gold/15 text-gold">
+                <span className="grid size-9 shrink-0 place-items-center rounded-xl border border-gold/40 bg-gold/15 text-gold">
                   <ActiveIcon className="size-4" />
                 </span>
                 <div className="min-w-0">
-                  <h3 className="font-heading text-lg leading-snug text-cream">{active.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-cream/80">{active.body}</p>
+                  <h3 className="line-clamp-1 font-heading text-base leading-snug text-cream">{active.title}</h3>
+                  <p className="mt-1 line-clamp-3 text-[0.8rem] leading-relaxed text-cream/80">{active.body}</p>
                 </div>
               </motion.div>
             </AnimatePresence>

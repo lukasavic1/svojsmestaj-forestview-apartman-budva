@@ -47,6 +47,7 @@ function MonthGrid({
 }) {
   const totalDays = daysInMonth(year, month);
   const offset = mondayOffset(year, month);
+  const trailing = 42 - offset - totalDays;
 
   return (
     <div>
@@ -64,7 +65,7 @@ function MonthGrid({
           </div>
         ))}
         {Array.from({ length: offset }, (_, i) => (
-          <div key={`${labelledBy}-e-${i}`} />
+          <div key={`${labelledBy}-e-${i}`} className="min-h-11 sm:min-h-12" />
         ))}
         {Array.from({ length: totalDays }, (_, i) => {
           const day = i + 1;
@@ -101,6 +102,9 @@ function MonthGrid({
             </button>
           );
         })}
+        {Array.from({ length: Math.max(0, trailing) }, (_, i) => (
+          <div key={`${labelledBy}-t-${i}`} className="min-h-11 sm:min-h-12" />
+        ))}
       </div>
     </div>
   );
@@ -128,10 +132,11 @@ export function RangeCalendar({ availability, checkIn, checkOut, onChange }: Pro
     asMonthIndex(availability.last.year, availability.last.month);
 
   const hint = useMemo(() => {
+    if (error) return error;
     if (!checkIn) return copy.calendar.selectCheckIn;
     if (!checkOut) return copy.calendar.selectCheckOut;
-    return null;
-  }, [checkIn, checkOut]);
+    return copy.calendar.rangeSet;
+  }, [checkIn, checkOut, error]);
 
   const pick = (iso: string, booked: boolean) => {
     if (booked || compareIso(iso, today) < 0) return;
@@ -185,19 +190,16 @@ export function RangeCalendar({ availability, checkIn, checkOut, onChange }: Pro
         </button>
       </div>
 
-      {hint ? (
-        <p className="mb-4 rounded-xl border border-gold/60 bg-gold/12 px-3 py-2 text-sm font-medium text-ink">
-          {hint}
-        </p>
-      ) : null}
-      {error ? (
-        <p
-          className="mb-4 rounded-xl border border-red-400 bg-red-50 px-3 py-2 text-sm font-medium text-red-800"
-          role="alert"
-        >
-          {error}
-        </p>
-      ) : null}
+      <p
+        className={`mb-4 min-h-[2.75rem] rounded-xl border px-3 py-2 text-sm font-medium ${
+          error
+            ? "border-red-400 bg-red-50 text-red-800"
+            : "border-gold/60 bg-gold/12 text-ink"
+        }`}
+        role={error ? "alert" : undefined}
+      >
+        {hint}
+      </p>
 
       <div className="grid gap-8 lg:grid-cols-2">
         <MonthGrid
@@ -241,18 +243,20 @@ export function RangeCalendar({ availability, checkIn, checkOut, onChange }: Pro
         </span>
       </div>
 
-      {checkIn || checkOut ? (
-        <button
-          type="button"
-          className="mt-3 text-xs font-semibold tracking-wide text-forest uppercase underline-offset-2 hover:underline"
-          onClick={() => {
-            onChange(null, null);
-            setError(null);
-          }}
-        >
-          {copy.calendar.clearDates}
-        </button>
-      ) : null}
+      <div className="mt-3 min-h-5">
+        {checkIn || checkOut ? (
+          <button
+            type="button"
+            className="text-xs font-semibold tracking-wide text-forest uppercase underline-offset-2 hover:underline"
+            onClick={() => {
+              onChange(null, null);
+              setError(null);
+            }}
+          >
+            {copy.calendar.clearDates}
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 }

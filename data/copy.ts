@@ -15,6 +15,7 @@ export const copy = {
     badge: "Budva · Dubovica · Zelena Oaza Miru",
     ctaPrimary: "Proveri dostupnost",
     ctaSecondary: "Pogledaj sve pogodnosti",
+    ctaSecondaryShort: "Pogodnosti",
     lead: "Prostran dvosoban stan sa dvije terase, okružen šumom i prirodnom svježinom. Potpuno opremljen za komforan i bezbrižan odmor porodica i parova.",
     ratingBadge: "9.6 / 10 · Izvanredno na Booking.com",
     cardFooter: "Idealno za boravak porodica i parova koji žele komfor u Budvi, bez ljetnje žege.",
@@ -154,7 +155,9 @@ export const copy = {
     rangeBlocked: "U odabranom periodu ima zauzetih dana.",
     minStay: "Minimalni boravak je 2 noćenja.",
     clearDates: "Obriši datume",
+    rangeSet: "Termini odabrani",
     loading: "Učitavanje kalendara…",
+    loadingHint: "Provjeravamo zauzete termine",
     unavailable: "Zauzete termine nismo uspjeli učitati. Datumi mogu biti netačni — pišite nam za potvrdu.",
   },
   footer: {

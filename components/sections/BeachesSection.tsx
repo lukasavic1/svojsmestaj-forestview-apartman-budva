@@ -32,8 +32,9 @@ function BeachCard({
         src={beach.src}
         alt={`${beach.name}, Budva`}
         fill
+        draggable={false}
         sizes={featured ? "100vw" : "(max-width: 768px) 100vw, 50vw"}
-        className="object-cover transition duration-700 group-hover:scale-105"
+        className="pointer-events-none object-cover transition duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-forest/92 via-forest/30 to-transparent" />
       <div className="absolute top-4 left-4 flex flex-wrap gap-2">
@@ -122,16 +123,16 @@ export function BeachesSection() {
                 type="button"
                 onClick={() => goTo(i)}
                 aria-pressed={i === active}
-                className={`min-w-0 rounded-2xl border px-1 py-2 text-center transition ${
+                className={`flex min-h-[3.35rem] min-w-0 flex-col items-center justify-center rounded-2xl border px-0.5 py-1.5 text-center transition ${
                   i === active
                     ? "border-gold bg-gold text-forest"
                     : "border-gold/30 bg-white/5 text-cream/80"
                 }`}
               >
-                <span className="block truncate text-[0.58rem] font-semibold tracking-[0.04em] uppercase">
+                <span className="block text-[0.52rem] leading-tight font-semibold tracking-normal uppercase">
                   {beach.shortName}
                 </span>
-                <span className={`mt-0.5 block text-[0.52rem] tracking-wide ${i === active ? "text-forest/70" : "text-gold/80"}`}>
+                <span className={`mt-0.5 block text-[0.5rem] tracking-wide ${i === active ? "text-forest/70" : "text-gold/80"}`}>
                   {beach.distance}
                 </span>
               </button>
@@ -141,7 +142,7 @@ export function BeachesSection() {
           <div
             ref={scrollerRef}
             onScroll={onCarouselScroll}
-            className="mt-4 flex h-[22rem] w-full min-w-0 snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="mt-4 flex h-[22rem] w-full min-w-0 snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden overscroll-x-contain touch-pan-x [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {beaches.map((beach) => (
               <div key={beach.id} className="h-full min-w-0 shrink-0 snap-start [flex:0_0_calc(100%-0.75rem)]">

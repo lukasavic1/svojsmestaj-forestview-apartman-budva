@@ -107,11 +107,21 @@ export function ContactFaqSection() {
             <p className="text-[0.72rem] font-semibold tracking-[0.22em] text-sage uppercase">{copy.contact.faqKicker}</p>
             <h3 className="mt-2 font-heading text-3xl text-forest md:text-4xl">{copy.contact.faqHeading}</h3>
             <p className="mt-2 text-sm text-muted">{copy.contact.faqLead}</p>
-            <Accordion.Root type="single" collapsible defaultValue={faqs[0].id} className="mt-4">
+            <Accordion.Root type="multiple" className="mt-4 [overflow-anchor:none]">
               {faqs.map((item) => (
-                <Accordion.Item key={item.id} value={item.id} className="border-b border-forest/10">
+                <Accordion.Item key={item.id} value={item.id} className="border-b border-forest/10 [overflow-anchor:none]">
                   <Accordion.Header>
-                    <Accordion.Trigger className="group flex w-full items-start justify-between gap-4 py-3.5 text-left">
+                    <Accordion.Trigger
+                      className="group flex w-full items-start justify-between gap-4 py-3.5 text-left [overflow-anchor:none]"
+                      onClick={() => {
+                        const y = window.scrollY;
+                        requestAnimationFrame(() => {
+                          requestAnimationFrame(() => {
+                            window.scrollTo({ top: y, left: 0, behavior: "instant" });
+                          });
+                        });
+                      }}
+                    >
                       <span className="font-heading text-[0.95rem] text-forest sm:text-lg">{item.question}</span>
                       <ChevronDown className="mt-1 size-5 shrink-0 text-gold transition-transform duration-300 ease-out group-data-[state=open]:rotate-180" />
                     </Accordion.Trigger>
