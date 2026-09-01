@@ -110,6 +110,8 @@ export const copy = {
     back: "Nazad",
     cancel: "Otkaži",
     submit: "Pošalji upit",
+    submitting: "Šaljemo upit…",
+    submitError: "Upit nije poslat. Pokušajte ponovo ili nas pozovite.",
     close: "Zatvori",
     name: "Ime i prezime",
     phone: "Telefon / WhatsApp",

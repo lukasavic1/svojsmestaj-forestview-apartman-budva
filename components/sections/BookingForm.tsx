@@ -37,6 +37,7 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
   const [guests, setGuests] = useState(2);
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const [availability, setAvailability] = useState<AvailabilityPayload | null>(null);
   const [availabilityError, setAvailabilityError] = useState(false);
@@ -84,7 +85,7 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
   const canSubmit =
     name.trim().length >= 2 && phone.trim().length >= 6 && guests >= 1 && guests <= site.capacity;
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!checkIn || !checkOut) {
       setStep(1);
@@ -95,24 +96,53 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
       setStep(1);
       return;
     }
-    if (!canSubmit) {
+    if (!canSubmit || submitting) {
       setStep(2);
       return;
     }
 
-    onSubmitted({
-      apartmentName: site.legalName,
-      period: periodLabel,
-      guests,
-      whatsappText: formatInquiryMessage({
-        name: name.trim(),
-        phone: phone.trim(),
-        checkIn,
-        checkOut,
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          phone: phone.trim(),
+          checkIn,
+          checkOut,
+          guests,
+          message: message.trim(),
+        }),
+      });
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        if (payload?.error === "range_blocked") {
+          setError(copy.calendar.rangeBlocked);
+          setStep(1);
+          return;
+        }
+        throw new Error("send_failed");
+      }
+      onSubmitted({
+        apartmentName: site.legalName,
+        period: periodLabel,
         guests,
-        message,
-      }),
-    });
+        whatsappText: formatInquiryMessage({
+          name: name.trim(),
+          phone: phone.trim(),
+          checkIn,
+          checkOut,
+          guests,
+          message,
+        }),
+      });
+    } catch {
+      setError(copy.booking.submitError);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const steps: { n: Step; label: string }[] = [
@@ -283,8 +313,8 @@ export function BookingForm({ onSubmitted, onCancel }: Props) {
             <button type="button" onClick={() => setStep(1)} className={btnGhost}>
               {copy.booking.back}
             </button>
-            <button type="submit" disabled={!canSubmit} className={btnPrimary}>
-              {copy.booking.submit}
+            <button type="submit" disabled={!canSubmit || submitting} className={btnPrimary}>
+              {submitting ? copy.booking.submitting : copy.booking.submit}
             </button>
           </>
         )}
