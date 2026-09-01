@@ -1,33 +1,23 @@
 import "server-only";
 
-import { google } from "googleapis";
+import ical, { type VEvent } from "node-ical";
 import { bookedKey } from "@/lib/calendar";
 import { AVAILABILITY_MONTHS, availabilityWindow } from "@/lib/availability";
 import type { AvailabilityPayload } from "@/types/calendar";
 
 const TIME_ZONE = "Europe/Podgorica";
-const PLACEHOLDER_EMAIL = "your-service-account@";
-const PLACEHOLDER_CALENDAR = "your_personal_calendar";
+const PLACEHOLDER_ICS = "your-secret-ical";
 
 type Day = { year: number; month: number; day: number };
 
-export function isGoogleCalendarConfigured(): boolean {
-  const email = process.env.GOOGLE_CLIENT_EMAIL?.trim() ?? "";
-  const key = process.env.GOOGLE_PRIVATE_KEY?.trim() ?? "";
-  const calendarId = process.env.GOOGLE_CALENDAR_ID?.trim() ?? "";
-  if (!email || !key || !calendarId) return false;
-  if (email.includes(PLACEHOLDER_EMAIL)) return false;
-  if (calendarId.includes(PLACEHOLDER_CALENDAR)) return false;
-  return key.includes("BEGIN PRIVATE KEY");
+function env(name: string): string {
+  return process.env[name]?.trim() ?? "";
 }
 
-function privateKey(): string {
-  let key = process.env.GOOGLE_PRIVATE_KEY ?? "";
-  key = key.trim();
-  if ((key.startsWith('"') && key.endsWith('"')) || (key.startsWith("'") && key.endsWith("'"))) {
-    key = key.slice(1, -1);
-  }
-  return key.replace(/\\n/g, "\n");
+export function isGoogleCalendarConfigured(): boolean {
+  const url = env("CALENDAR_ICS_URL");
+  if (!url || url.includes(PLACEHOLDER_ICS)) return false;
+  return url.startsWith("https://");
 }
 
 function ymdInZone(iso: string): Day {
@@ -75,45 +65,78 @@ export function markBusyInterval(booked: Record<string, number[]>, startIso: str
   }
 }
 
-export async function fetchGoogleAvailability(unitId = "forest-view"): Promise<AvailabilityPayload> {
-  const calendarId = process.env.GOOGLE_CALENDAR_ID!.trim();
-  const auth = new google.auth.JWT({
-    email: process.env.GOOGLE_CLIENT_EMAIL!.trim(),
-    key: privateKey(),
-    scopes: ["https://www.googleapis.com/auth/calendar.readonly"],
-  });
-  const calendar = google.calendar({ version: "v3", auth });
-  const { first, last } = availabilityWindow(AVAILABILITY_MONTHS);
+function pad(value: number) {
+  return String(value).padStart(2, "0");
+}
 
-  const booked: Record<string, number[]> = {};
-  const chunkStart = new Date(first.year, first.month, 1);
+function allDayNoonUtc(date: Date) {
+  return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}T12:00:00.000Z`;
+}
+
+function occurrenceIso(start: Date, end: Date, allDay: boolean) {
+  if (allDay) return { start: allDayNoonUtc(start), end: allDayNoonUtc(end) };
+  return { start: start.toISOString(), end: end.toISOString() };
+}
+
+function isBusyEvent(event: VEvent) {
+  if (event.type !== "VEVENT") return false;
+  if (event.status === "CANCELLED") return false;
+  if (event.transparency === "TRANSPARENT") return false;
+  return Boolean(event.start);
+}
+
+export async function fetchGoogleAvailability(unitId = "forest-view"): Promise<AvailabilityPayload> {
+  const icsUrl = env("CALENDAR_ICS_URL");
+  const { first, last } = availabilityWindow(AVAILABILITY_MONTHS);
+  const windowStart = new Date(first.year, first.month, 1);
   const windowEnd = new Date(last.year, last.month + 1, 1);
 
-  while (chunkStart < windowEnd) {
-    const chunkEnd = new Date(chunkStart.getFullYear(), chunkStart.getMonth() + 2, 1);
-    const timeMax = chunkEnd < windowEnd ? chunkEnd : windowEnd;
+  let response: Response;
+  try {
+    response = await fetch(icsUrl, {
+      cache: "no-store",
+      headers: { "User-Agent": "SvojSmestajCalendar/1.0" },
+      signal: AbortSignal.timeout(15000),
+    });
+  } catch {
+    throw new Error("Could not download the calendar iCal feed.");
+  }
 
-    const response = await calendar.freebusy.query({
-      requestBody: {
-        timeMin: chunkStart.toISOString(),
-        timeMax: timeMax.toISOString(),
-        timeZone: TIME_ZONE,
-        items: [{ id: calendarId }],
-      },
+  if (!response.ok) {
+    throw new Error(`Calendar iCal feed returned ${response.status}. Check CALENDAR_ICS_URL.`);
+  }
+
+  const body = await response.text();
+  if (!body.includes("BEGIN:VCALENDAR")) {
+    throw new Error("CALENDAR_ICS_URL did not return an iCal calendar. Use the secret iCal address from Google Calendar.");
+  }
+
+  const parsed = ical.parseICS(body);
+  const booked: Record<string, number[]> = {};
+
+  for (const item of Object.values(parsed)) {
+    if (!item || item.type !== "VEVENT") continue;
+    const event = item as VEvent;
+    if (event.recurrenceid) continue;
+    if (!isBusyEvent(event)) continue;
+
+    const instances = ical.expandRecurringEvent(event, {
+      from: windowStart,
+      to: windowEnd,
+      expandOngoing: true,
     });
 
-    const cal = response.data.calendars?.[calendarId];
-    if (cal?.errors?.length) {
-      const reason = cal.errors.map((item) => item.reason).filter(Boolean).join(", ");
-      throw new Error(reason || "Google Calendar freebusy error");
+    for (const instance of instances) {
+      if (!isBusyEvent(instance.event)) continue;
+      const allDay = instance.isFullDay;
+      if (!allDay) {
+        const startDay = ymdInZone(instance.start.toISOString());
+        const endDay = ymdInZone(instance.end.toISOString());
+        if (cmpDay(endDay, startDay) <= 0) continue;
+      }
+      const iso = occurrenceIso(instance.start, instance.end, allDay);
+      markBusyInterval(booked, iso.start, iso.end);
     }
-
-    for (const slot of cal?.busy ?? []) {
-      if (!slot.start || !slot.end) continue;
-      markBusyInterval(booked, slot.start, slot.end);
-    }
-
-    chunkStart.setTime(timeMax.getTime());
   }
 
   for (const key of Object.keys(booked)) {
