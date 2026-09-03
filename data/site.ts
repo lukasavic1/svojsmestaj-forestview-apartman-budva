@@ -5,7 +5,7 @@ export const site = {
   subTagline:
     "Prostran dvosoban stan sa dvije terase, okružen šumom i prirodnom svježinom. Potpuno opremljen modernim uređajima, smješten u zgradi sa zajedničkim parkingom – savršen izbor za porodice i parove.",
   hosts: "Domaćini Forest View",
-  sizeSqm: 75,
+  sizeSqm: 67,
   bedrooms: 2,
   capacity: 4,
   location: {
@@ -42,6 +42,6 @@ export const site = {
   seo: {
     title: "Forest View Modern Apartment Budva | Zelena Oaza u Dubovici",
     description:
-      "Dvosoban stan 75 m² u Dubovici, Budva — dvije terase u hladu šume, klima, Netflix, mašina za veš i suđe, besplatan parking. 1,7 km od Slovenske plaže. Rezervišite direktno.",
+      "Dvosoban stan 67 m² u Dubovici, Budva — dvije terase u hladu šume, klima, Netflix, mašina za veš i suđe, besplatan parking. 1,7 km od Slovenske plaže. Rezervišite direktno.",
   },
 } as const;

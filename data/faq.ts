@@ -24,7 +24,7 @@ export const faqs = [
   {
     id: "capacity",
     question: "Za koliko gostiju je stan?",
-    answer: "Dvosoban stan od 75 m², do 4 gosta. Dvije spavaće sobe, dnevni boravak, dvije terase i dva kupatila.",
+    answer: "Dvosoban stan od 67 m², do 4 gosta. Dvije spavaće sobe, dnevni boravak, dvije terase i dva kupatila.",
   },
   {
     id: "price",

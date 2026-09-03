@@ -5,13 +5,13 @@ const img = (name: string) => `/images/apartman/${name}.jpg`;
 export const media = {
   hero: [img("terrace-1"), img("living-1"), img("bedroom-1")],
   about: {
-    mosaic: [img("terrace-1"), img("living-2"), img("living-1")],
+    mosaic: [img("NOVA_SLIKA_TERASE"), img("living-2"), img("living-1")],
   },
 } as const;
 
 export const gallery: Photo[] = [
   {
-    src: img("terrace-1"),
+    src: img("NOVA_SLIKA_TERASE"),
     alt: "Terasa u prirodnom hladu — rattan sjedišta i zelenilo Dubovice",
     span: "tall",
   },

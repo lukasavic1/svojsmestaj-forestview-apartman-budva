@@ -28,9 +28,9 @@ export const copy = {
       "Stan je u potpunosti opremljen za komforan i bezbrižan boravak porodica sa djecom ili parova koji planiraju duži odmor. Dnevni boravak je klimatizovan i idealan za popodnevno opuštanje, a stan posjeduje čak dva televizora sa bogatim paketom kablovskih kanala i besplatnim Netflix pristupom za vaše omiljene filmove i serije.",
       "Glavni adut ovog smještaja su dvije prostrane terase sa pogledom na šumu i bujno zelenilo, koje obezbjeđuju prirodnu hladovinu tokom cijelog dana. Zbog specifične lokacije i blizine šume, večeri kod nas su prijatne i svježe, što garantuje miran i kvalitetan san bez budvanske galame.",
     ],
-    badge: "Dubovica · 75 m²",
+    badge: "Dubovica · 67 m²",
     pills: [
-      { id: "size", label: "75 m² · 2 sobe" },
+      { id: "size", label: "67 m² · 2 sobe" },
       { id: "family", label: "Porodice i parovi" },
       { id: "comfort", label: "Klima + Netflix" },
     ],

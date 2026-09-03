@@ -1,5 +1,5 @@
 export const highlights = [
-  { label: "75 m²", detail: "Prostran stan" },
+  { label: "67 m²", detail: "Prostran stan" },
   { label: "Dvosoban stan", detail: "Do 4 gosta" },
   { label: "2× Terase u hladu", detail: "Pogled na šumu" },
   { label: "Besplatan parking", detail: "Zajednički + pomoćni" },
@@ -30,7 +30,7 @@ export const heroFeatures = [
 ] as const;
 
 export const heroRibbon = [
-  { id: "size", label: "75 m² prostora" },
+  { id: "size", label: "67 m² prostora" },
   { id: "rooms", label: "2 spavaće sobe" },
   { id: "beach", label: "1,7 km od Slovenske plaže" },
   { id: "wifi", label: "Optički WiFi & AC" },
